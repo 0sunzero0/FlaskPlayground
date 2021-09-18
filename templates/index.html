@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous"></script>
+
+    <!-- Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
+    <title>손목 보호를 위한 쇼핑몰</title>
+    <style>
+        * {
+            font-family: 'Jua', sans-serif;
+        }
+
+        .wrap {
+            width: 500px;
+            margin: auto;
+        }
+
+        .item-img {
+            width: 500px;
+            height: 300px;
+            margin-bottom: 20px;
+
+            background-image: url("https://images-na.ssl-images-amazon.com/images/I/61jcP-trvhL._SL1200_.jpg");
+            background-position: center;
+            background-size: cover;
+        }
+
+        .price {
+            margin-left: 20px;
+            font-size: medium;
+        }
+
+        .btn-order {
+            margin: auto;
+            width: 100px;
+            display: block;
+        }
+        .rate{
+            color: blue;
+        }
+    </style>
+    <script>
+        $(document).ready(function() {
+            get_rate();
+        })
+
+        function get_rate() {
+            // 여기에 코드를 입력하세요
+            $('#rate').empty()
+            $.ajax({
+                type: "GET",
+                url: "http://spartacodingclub.shop/sparta_api/rate",
+                data: {},
+                success: function (response) {
+                    console.log(response)
+                    let rate = response['rate'];
+                    document.getElementById('now-rate').innerText = rate;
+                    console.log(rate);
+                }
+            })
+        }
+        function order() {
+            alert("주문이 완료되었습니다.");
+        }
+    </script>
+</head>
+
+<body>
+<div class="wrap">
+    <div class="item-img"></div>
+    <div class="item-desc">
+        <h1>어고노믹 키보드<span class="price">가격: 200,000원 / 개</span></h1>
+        <p>이 키보드는 손목이 꺽이는 것을 방지해주는 키보드 입니다.<br>여러분은 꼭 손목 미리 예방하세요! 🩹<br>저처럼 소잃고 외양간 고치시면 안돼요 🥲</p>
+        <p class="rate">달러-원 환율 : <span id="now-rate"></span></p>
+    </div>
+    <form>
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon1">주문자 이름</span>
+            </div>
+            <input type="text" class="form-control" placeholder="주문자 이름을 입력해주세요." aria-label="Username"
+                   aria-describedby="basic-addon1">
+        </div>
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <label class="input-group-text" for="inputGroupSelect01">수량</label>
+            </div>
+            <select class="custom-select" id="inputGroupSelect01">
+                <option selected>수량을 선택해주세요.</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+            </select>
+        </div>
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon2">주소</span>
+            </div>
+            <input type="text" class="form-control" placeholder="주소를 입력해주세요." aria-label="Username"
+                   aria-describedby="basic-addon1">
+        </div>
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon3">연락처</span>
+            </div>
+            <input type="text" class="form-control" placeholder="연락처를 입력해주세요." aria-label="Username"
+                   aria-describedby="basic-addon1">
+        </div>
+        <button onclick="order()" type="button" class="btn btn-light btn-order">주문하기</button>
+    </form>
+</div>
+</body>
+
+</html>
+
+
