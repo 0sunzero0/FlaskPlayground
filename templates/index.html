@@ -56,10 +56,15 @@
         .rate{
             color: blue;
         }
+        .table{
+            padding-top: 20px;
+        }
     </style>
     <script>
         $(document).ready(function() {
             get_rate();
+            show_order();
+
         })
 
         function get_rate() {
@@ -77,8 +82,47 @@
                 }
             })
         }
-        function order() {
-            alert("주문이 완료되었습니다.");
+
+        function show_order(){
+            $.ajax({
+                type: "GET",
+                url: "/order",
+                data: {},
+                success: function (response) {
+                    let orders = response['all_orders']
+                    for (let i = 0; i < orders.length; i++) {
+                        let name = orders[i]['name']
+                        let order_num = orders[i]['order num']
+                        let address = orders[i]['address']
+                        let phone_num = orders[i]['phone num']
+
+                        let temp_html = `<tr>
+                                           <td>${name}</td>
+                                           <td>${order_num}</td>
+                                           <td>${address}</td>
+                                           <td>${phone_num}</td>
+                                          </tr>`
+                        $('#orders-box').append(temp_html)
+                    }
+                }
+            })
+        }
+
+        function make_order() {
+            let name = $('#name').val()
+            let order_num = $('#inputGroupSelect01').val()
+            let address = $('#address').val()
+            let phone_num = $('#phone_num').val()
+
+            $.ajax({
+                    type: "POST",
+                    url: "/order",
+                    data: {name_give: name, order_num_give: order_num, address_give: address, phone_num_give: phone_num},
+                    success: function (response) {
+                        alert(response["msg"]);
+                        window.location.reload();
+                    }
+                })
         }
     </script>
 </head>
@@ -96,7 +140,7 @@
             <div class="input-group-prepend">
                 <span class="input-group-text" id="basic-addon1">주문자 이름</span>
             </div>
-            <input type="text" class="form-control" placeholder="주문자 이름을 입력해주세요." aria-label="Username"
+            <input type="text" class="form-control" id="name" placeholder="주문자 이름을 입력해주세요." aria-label="Username"
                    aria-describedby="basic-addon1">
         </div>
         <div class="input-group mb-3">
@@ -114,18 +158,32 @@
             <div class="input-group-prepend">
                 <span class="input-group-text" id="basic-addon2">주소</span>
             </div>
-            <input type="text" class="form-control" placeholder="주소를 입력해주세요." aria-label="Username"
+            <input type="text" class="form-control" id="address" placeholder="주소를 입력해주세요." aria-label="Username"
                    aria-describedby="basic-addon1">
         </div>
         <div class="input-group mb-3">
             <div class="input-group-prepend">
                 <span class="input-group-text" id="basic-addon3">연락처</span>
             </div>
-            <input type="text" class="form-control" placeholder="연락처를 입력해주세요." aria-label="Username"
+            <input type="text" class="form-control" id="phone_num" placeholder="연락처를 입력해주세요." aria-label="Username"
                    aria-describedby="basic-addon1">
         </div>
-        <button onclick="order()" type="button" class="btn btn-light btn-order">주문하기</button>
+        <button onclick="make_order()" type="button" class="btn btn-light btn-order">주문하기</button>
     </form>
+    <div class ="table">
+        <table class="table">
+          <thead class="thead-light">
+            <tr>
+              <th scope="col">이름</th>
+              <th scope="col">수량</th>
+              <th scope="col">주소</th>
+              <th scope="col">연락처</th>
+            </tr>
+          </thead>
+          <tbody id="orders-box">
+          </tbody>
+        </table>
+    </div>
 </div>
 </body>
 
