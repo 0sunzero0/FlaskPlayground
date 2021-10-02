@@ -18,6 +18,7 @@
     - (JSON 형식) 'result'= 'success',  'orders'= 주문리스트
 # 2️⃣ MemoBoard
 ## API 설계
+### CRUD
 - 저장(POST): 제목, 내용을 입력 후 버튼클릭 시 게시판목록에 추가
 - 조회(GET): reg_date 컬럼을 사용하여 최근에 작성한 글이 상위에 위치하도록 최신순으로 정렬
 - 삭제(DELETE): 데이터의 유니크한 번호인 id 컬럼을 사용하여 삭제
