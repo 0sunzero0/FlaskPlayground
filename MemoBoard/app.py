@@ -27,7 +27,7 @@ def save_post():
 
 @app.route('/show', methods=['GET'])
 def get_post():
-    doc = list(db.articles.find({}).sort('_id', 1))
+    doc = list(db.articles.find({}).sort('reg_date', 1))
     for one_post in doc:
        one_post["_id"] = str(one_post["_id"])
     return jsonify({"result": "success", "articles": doc})
