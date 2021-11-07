@@ -26,6 +26,8 @@
 ### Pagination
 ### Search
 ### Login
+### Comment
+### 실시간 알람
 # 3️⃣ StockRecommend
 ## 구현
 ### 추천 시작 
