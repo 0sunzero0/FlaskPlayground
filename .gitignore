@@ -1,0 +1,21 @@
+### macOS ###
+# General
+.DS_Store
+.AppleDouble
+.LSOverride
+venv/*
+
+# pycache
+__pycache__/*
+
+# Icon must end with two \r
+Icon
+
+# pycache
+__pycache__/*
+
+# Thumbnails
+._*
+
+### PyCharm ###
+.idea/*

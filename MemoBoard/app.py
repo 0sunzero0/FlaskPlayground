@@ -1,12 +1,13 @@
+from datetime import datetime
+
 from flask import Flask, render_template, jsonify, request
 from pymongo import MongoClient
-from datetime import datetime
-from bson import ObjectId
+import os
 
 app = Flask(__name__)
 
-client = MongoClient("mongodb://localhost:27017/")
-db = client.dbBoard
+client = MongoClient(os.environ.get("MONGO_DB_PATH"))
+db = client.dbStock
 
 
 @app.route('/')
@@ -14,30 +15,40 @@ def index():
     return render_template('index.html')
 
 
-@app.route('/save', methods=['POST'])
+@app.route('/post', methods=['POST'])
 def save_post():
-    title_receive = request.form['title_give']
-    content_receive = request.form['content_give']
-    current_time = datetime.now()
+    title = request.form.get('title')
+    content = request.form.get('content')
+    post_count = db.post.count()
+    if post_count == 0:
+        max_value = 1
+    else:
+        max_value = db.post.find_one(sort=[("idx", -1)])['idx'] + 1
 
-    doc = {'title': title_receive, 'content': content_receive,
-           'reg_date': current_time}
-    db.articles.insert_one(doc)
-    return jsonify({'result': "success", 'msg': "게시글 작성 완료!"})
+    post = {
+        'idx': max_value,
+        'title': title,
+        'content': content,
+        'reg_date': datetime.now()
+    }
+    db.post.insert_one(post)
+    return {"result": "success"}
 
-@app.route('/show', methods=['GET'])
+
+@app.route('/post', methods=['GET'])
 def get_post():
-    doc = list(db.articles.find({}).sort('reg_date', 1))
-    for one_post in doc:
-       one_post["_id"] = str(one_post["_id"])
-    return jsonify({"result": "success", "articles": doc})
+    posts = list(db.post.find({}, {'_id': False}).sort([("reg_date", -1)]))
+    for a in posts:
+        a['reg_date'] = a['reg_date'].strftime('%Y.%m.%d %H:%M:%S')
+
+    return jsonify({"posts": posts})
 
 
-@app.route('/delete', methods=['DELETE'])
+@app.route('/post', methods=['DELETE'])
 def delete_post():
-    id_receive = request.form['id_give']
-    db.articles.delete_one({'_id': ObjectId(id_receive)})
-    return jsonify({"result": "success", 'msg': 'til 삭제 완료!'})
+    idx = request.args.get('idx')
+    db.post.delete_one({'idx': int(idx)})
+    return {"result": "success"}
 
 
 if __name__ == "__main__":
